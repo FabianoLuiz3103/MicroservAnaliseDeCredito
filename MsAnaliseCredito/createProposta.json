@@ -1,0 +1,14 @@
+
+{
+  "user": {
+    "nome": "Fabiano",
+    "sobrenome": "Luiz",
+    "cpf": "53824552876",
+    "telefone": "11973700091",
+    "renda": 750.0
+  },
+  "proposta": {
+    "valorSolicitado": 1500.0,
+    "prazoParaPagamento": 12
+  }
+}

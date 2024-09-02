@@ -4,6 +4,7 @@ import br.com.FabianoLuiz3103.MsAnaliseCredito.dto.user.DadosCadastroUser;
 import br.com.FabianoLuiz3103.MsAnaliseCredito.dto.user.DadosDetalhamentoUser;
 import br.com.FabianoLuiz3103.MsAnaliseCredito.model.User;
 import br.com.FabianoLuiz3103.MsAnaliseCredito.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
+    @Transactional                    //dto
     public DadosDetalhamentoUser save(DadosCadastroUser dadosCadastro) {
         var user = new User(dadosCadastro); //user.getId() -> null
         userRepository.save(user); //user.getId() -> Id gerado
@@ -29,6 +30,7 @@ public class UserService {
     public List<DadosDetalhamentoUser> findAll(){
         return userRepository.findAll().stream()
                 .map(DadosDetalhamentoUser::new).collect(Collectors.toList());
+                     //dto
     }
 
     @Transactional(readOnly = true)
@@ -37,14 +39,20 @@ public class UserService {
                 () -> new RuntimeException("User não encontrado com id: " + id)
         );
         return new DadosDetalhamentoUser(user);
+                   //dto
     }
 
-    @Transactional
+    @Transactional                               //dto
     public DadosDetalhamentoUser update(Long id, DadosCadastroUser userDTO){
-        var user = userRepository.getReferenceById(id);
-        user.atualizaUser(userDTO);
-        userRepository.save(user);
-        return new DadosDetalhamentoUser(user);
+        try{
+            var user = userRepository.getReferenceById(id);
+            user.atualizaUser(userDTO);
+            userRepository.save(user);
+            return new DadosDetalhamentoUser(user);
+        }catch (EntityNotFoundException e){
+            throw new EntityNotFoundException("User não encontrado com id: " + id);
+        }
+
     }
 
     @Transactional

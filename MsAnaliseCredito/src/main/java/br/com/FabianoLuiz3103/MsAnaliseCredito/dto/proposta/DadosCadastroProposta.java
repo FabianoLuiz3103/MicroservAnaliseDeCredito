@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 
 public record DadosCadastroProposta(
-        Long id,
         @NotNull(message = "O valor solicitado é obrigatório")
         @Positive(message = "O valor solicitado deve ser positivo")
         BigDecimal valorSolicitado,
@@ -19,7 +18,6 @@ public record DadosCadastroProposta(
 
     public DadosCadastroProposta(Proposta proposta){
         this(
-                proposta.getId(),
                 proposta.getValorSolicitado(),
                 proposta.getPrazoParaPagamento(),
                 proposta.getAprovado()
